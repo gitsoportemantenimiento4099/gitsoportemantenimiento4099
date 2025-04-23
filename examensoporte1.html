@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen para Soporte Técnico</title>
+    <style>
+        /* Estilos CSS */
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0 0 0 / 10%); /* Adjusted shadow syntax */
+        }
+
+        .question {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .question:last-of-type { /* Use last-of-type for question, before score display */
+            border-bottom: none;
+            margin-bottom: 10px; /* Adjust spacing before score */
+        }
+
+
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: baseline; /* Align number and text base */
+        }
+
+        .question-number {
+            display: inline-block;
+            width: 25px; /* Fixed width for number circle */
+            height: 25px;
+            line-height: 25px; /* Center text vertically */
+            text-align: center;
+            border-radius: 50%;
+            /* Updated styles */
+            background-color: white; /* Remove blue background */
+            color: #333; /* Make number black */
+            border: 1px solid #ccc; /* Add a subtle border for definition */
+            font-size: 0.9em;
+            margin-right: 10px;
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+
+        .options {
+            margin-left: 35px; /* Align options below question text */
+        }
+
+        .option {
+            display: flex; /* Align radio/checkbox and label */
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px; /* Add padding for hover/feedback background */
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .option:hover {
+            /* Keep hover subtle, feedback colors are primary */
+            background-color: #f9f9f9;
+        }
+
+        .option input[type="radio"],
+        .option input[type="checkbox"] {
+            margin-right: 10px;
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+
+        .option label {
+            flex-grow: 1; /* Allow label to take available space */
+            cursor: pointer; /* Ensure label is clickable */
+        }
+
+        /* Feedback styles */
+        /* Keep green for correct options */
+        .option.correct {
+            background-color: #e9ffe9; /* Light green */
+            border: 1px solid #00cc00; /* Green border */
+        }
+
+        /* Keep red for INCORRECTLY *selected* options */
+        .option.incorrect {
+            background-color: #ffe9e9; /* Light red */
+            border: 1px solid #cc0000; /* Red border */
+        }
+
+        /* Style for the score display */
+        .score-display {
+            margin-top: 20px;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            background-color: #f0f0f0; /* Light grey background */
+            border-top: 1px solid #ccc;
+            border-radius: 0 0 8px 8px; /* Match quiz container bottom radius */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Examen para Soporte Técnico (D)</h1>
+        <p>Este examen calificará sus conocimientos en soporte técnico.</p>
+        <p>by </p>
+    </div>
+
+    <div class="quiz-container">
+
+        <!-- Question 1 -->
+        <div class="question" data-question-type="multiple">
+            <div class="question-text">
+                <span class="question-number">1</span>
+                ¿Cuáles son las dos consideraciones de mayor importancia para tener en cuenta al construir una estación de trabajo que ejecutará varias máquinas virtuales? (Elija dos opciones).
+            </div>
+            <div class="options" data-question-name="q1">
+                <div class="option">
+                    <input type="checkbox" id="q1_option_a" name="q1" value="a">
+                    <label for="q1_option_a">a Cantidad de RAM</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="q1_option_b" name="q1" value="b">
+                    <label for="q1_option_b">b Número de núcleos de CPU</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="q1_option_c" name="q1" value="c">
+                    <label for="q1_option_c">c Tarjeta de video potente</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="q1_option_d" name="q1" value="d">
+                    <label for="q1_option_d">d Tarjeta de sonido de tecnología avanzada</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">2</span>
+                Consulte la ilustración. ¿Qué tipo de adaptador se muestra?
+                <!-- Placeholder for image if you have it -->
+                <img src="placeholder_adapter.png" alt="Illustration of network adapter" style="max-width: 150px; margin-top: 10px;">
+            </div>
+            <div class="options" data-question-name="q2">
+                <div class="option">
+                    <input type="radio" id="q2_option_a" name="q2" value="a">
+                    <label for="q2_option_a">a Sonido</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q2_option_b" name="q2" value="b">
+                    <label for="q2_option_b">b RAID</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q2_option_c" name="q2" value="c">
+                    <label for="q2_option_c">c Video</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q2_option_d" name="q2" value="d">
+                    <label for="q2_option_d">d Interfaz de red</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question" data-question-type="multiple">
+            <div class="question-text">
+                <span class="question-number">3</span>
+                ¿Cuáles son los dos datos que se deben conocer antes de seleccionar un tipo de fuente de energía? (Elija dos opciones).
+            </div>
+            <div class="options" data-question-name="q3">
+                <div class="option">
+                    <input type="checkbox" id="q3_option_a" name="q3" value="a">
+                    <label for="q3_option_a">a El tipo de CPU.</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="q3_option_b" name="q3" value="b">
+                    <label for="q3_option_b">b El factor de forma del gabinete.</label>
+                </div>
+                 <div class="option">
+                    <input type="checkbox" id="q3_option_c" name="q3" value="c">
+                    <label for="q3_option_c">c El voltaje requerido por los dispositivos periféricos.</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="q3_option_d" name="q3" value="d">
+                    <label for="q3_option_d">d El voltaje total de todos los componentes.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question" data-question-type="multiple">
+            <div class="question-text">
+                <span class="question-number">4</span>
+                ¿Cuáles de los siguientes son dos factores que se deben considerar al elegir un gabinete de PC? (Elija dos opciones).
+            </div>
+            <div class="options" data-question-name="q4">
+                <div class="option">
+                    <input type="checkbox" id="q4_option_a" name="q4" value="a">
+                    <label for="q4_option_a">a El tamaño del monitor.</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="q4_option_b" name="q4" value="b">
+                    <label for="q4_option_b">b El proveedor que fabricó la motherboard.</label>
+                </div>
+                 <div class="option">
+                    <input type="checkbox" id="q4_option_c" name="q4" value="c">
+                    <label for="q4_option_c">c El número de ubicaciones de unidades internas.</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="q4_option_d" name="q4" value="d">
+                    <label for="q4_option_d">d El tamaño de la motherboard y la fuente de energía.</label>
+                </div>
+            </div>
+        </div>
+
+         <!-- Question 5 -->
+         <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">5</span>
+                ¿Qué unidad de medida se utiliza para indicar la velocidad de un disco duro?
+            </div>
+            <div class="options" data-question-name="q5">
+                <div class="option">
+                    <input type="radio" id="q5_option_a" name="q5" value="a">
+                    <label for="q5_option_a">a Revoluciones por minuto</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q5_option_b" name="q5" value="b">
+                    <label for="q5_option_b">b Gigabytes</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q5_option_c" name="q5" value="c">
+                    <label for="q5_option_c">c Páginas por minuto</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q5_option_d" name="q5" value="d">
+                    <label for="q5_option_d">d Clústeres por minuto</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">6</span>
+                Consulte la ilustración. ¿Qué tipo de ranura de expansión para tarjeta de video se muestra?
+                 <!-- Placeholder for image if you have it -->
+                 <img src="placeholder_agp.png" alt="Illustration of AGP slot" style="max-width: 150px; margin-top: 10px;">
+            </div>
+            <div class="options" data-question-name="q6">
+                <div class="option">
+                    <input type="radio" id="q6_option_a" name="q6" value="a">
+                    <label for="q6_option_a">a AGP</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q6_option_b" name="q6" value="b">
+                    <label for="q6_option_b">b ISA</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q6_option_c" name="q6" value="c">
+                    <label for="q6_option_c">c PCI</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q6_option_d" name="q6" value="d">
+                    <label for="q6_option_d">d PCIe</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question" data-question-type="multiple">
+            <div class="question-text">
+                <span class="question-number">7</span>
+                ¿Cuáles son las dos actividades que normalmente controla el puente norte del conjunto de chips? (Elija dos opciones).
+            </div>
+            <div class="options" data-question-name="q7">
+                <div class="option">
+                    <input type="checkbox" id="q7_option_a" name="q7" value="a">
+                    <label for="q7_option_a">a La comunicación entre la CPU y los puertos de E/S</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="q7_option_b" name="q7" value="b">
+                    <label for="q7_option_b">b El acceso a la RAM</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="q7_option_c" name="q7" value="c">
+                    <label for="q7_option_c">c La comunicación entre la CPU y el disco duro</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="q7_option_d" name="q7" value="d">
+                    <label for="q7_option_d">d El acceso a la tarjeta de video</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">8</span>
+                Un técnico observa una motherboard y ve un conector de 24 pines. ¿Qué componente se puede conectar a la motherboard mediante ese conector de 24 pines?
+            </div>
+            <div class="options" data-question-name="q8">
+                <div class="option">
+                    <input type="radio" id="q8_option_a" name="q8" value="a">
+                    <label for="q8_option_a">a Fuente de energía</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q8_option_b" name="q8" value="b">
+                    <label for="q8_option_b">b Tarjeta de video</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q8_option_c" name="q8" value="c">
+                    <label for="q8_option_c">c Unidad SATA</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q8_option_d" name="q8" value="d">
+                    <label for="q8_option_d">d Unidad de disquete</label>
+                </div>
+            </div>
+        </div>
+
+         <!-- Question 9 -->
+         <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">9</span>
+                ¿Qué herramienta en Windows XP le brinda acceso al técnico para inicializar discos y crear particiones?
+            </div>
+            <div class="options" data-question-name="q9">
+                <div class="option">
+                    <input type="radio" id="q9_option_a" name="q9" value="a">
+                    <label for="q9_option_a">a Defrag</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q9_option_b" name="q9" value="b">
+                    <label for="q9_option_b">b Liberador de espacio en disco</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q9_option_c" name="q9" value="c">
+                    <label for="q9_option_c">c Administración de disco</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q9_option_d" name="q9" value="d">
+                    <label for="q9_option_d">d Scandisk</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question" data-question-type="multiple">
+            <div class="question-text">
+                <span class="question-number">10</span>
+                ¿Cuáles son los dos tipos de herramientas que pueden ayudar a proteger una PC de ataques malintencionados? (Elija dos opciones).
+            </div>
+            <div class="options" data-question-name="q10">
+                <div class="option">
+                    <input type="checkbox" id="q10_option_a" name="q10" value="a">
+                    <label for="q10_option_a">a Software antivirus</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="q10_option_b" name="q10" value="b">
+                    <label for="q10_option_b">b Administración de discos</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="q10_option_c" name="q10" value="c">
+                    <label for="q10_option_c">c ScanDisk</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="q10_option_d" name="q10" value="d">
+                    <label for="q10_option_d">d Eliminador de spyware</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 11 -->
+        <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">11</span>
+                ¿Qué solución de limpieza se recomienda para limpiar los contactos de los componentes de PC?
+            </div>
+            <div class="options" data-question-name="q11">
+                <div class="option">
+                    <input type="radio" id="q11_option_a" name="q11" value="a">
+                    <label for="q11_option_a">a Alcohol para fricciones</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q11_option_b" name="q11" value="b">
+                    <label for="q11_option_b">b Alcohol isopropílico</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q11_option_c" name="q11" value="c">
+                    <label for="q11_option_c">c Limpiavidrios con amoníaco</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q11_option_d" name="q11" value="d">
+                    <label for="q11_option_d">d Agua mezclada con una pequeña cantidad de detergente</label>
+                </div>
+            </div>
+        </div>
+
+         <!-- Question 12 -->
+         <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">12</span>
+                ¿Por qué es una herramienta de organización importante para el técnico llevar un registro de todos los servicios y las reparaciones?
+            </div>
+            <div class="options" data-question-name="q12">
+                <div class="option">
+                    <input type="radio" id="q12_option_a" name="q12" value="a">
+                    <label for="q12_option_a">a Incrementa el costo de los servicios y las reparaciones.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q12_option_b" name="q12" value="b">
+                    <label for="q12_option_b">b Permite compartir públicamente la información en Internet.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q12_option_c" name="q12" value="c">
+                    <label for="q12_option_c">c Reduce las aptitudes técnicas requeridas de los nuevos técnicos.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q12_option_d" name="q12" value="d">
+                    <label for="q12_option_d">d Proporciona material de referencia sobre problemas similares que puedan ocurrir en el futuro.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 13 -->
+        <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">13</span>
+                ¿De qué forma protegen las UPS en línea a los equipos de computación contra apagones parciales y totales?
+            </div>
+            <div class="options" data-question-name="q13">
+                <div class="option">
+                    <input type="radio" id="q13_option_a" name="q13" value="a">
+                    <label for="q13_option_a">a Descargando a tierra el exceso de voltaje eléctrico</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q13_option_b" name="q13" value="b">
+                    <label for="q13_option_b">b Utilizando una batería para suministrar un nivel constante de voltaje</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q13_option_c" name="q13" value="c">
+                    <label for="q13_option_c">c Conmutando de la fuente de energía principal a una fuente de energía de reserva</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q13_option_d" name="q13" value="d">
+                    <label for="q13_option_d">d Deteniendo el flujo de voltaje a la PC</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 14 -->
+        <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">14</span>
+                Un técnico trabaja en la resolución de problemas en una PC que no arranca. Cuando se enciende, emite una serie de tonos e indica que la configuración del BIOS cambió y requiere una reconfiguración. El técnico modifica la configuración del BIOS, la guarda, y la PC arranca. Luego, cuando se apaga la PC y se vuelve a encender, aparece el mismo mensaje de error, y todos los cambios que se habían realizado en el BIOS ya no están. ¿Qué debe hacer el técnico para solucionar el problema?
+            </div>
+            <div class="options" data-question-name="q14">
+                <div class="option">
+                    <input type="radio" id="q14_option_a" name="q14" value="a">
+                    <label for="q14_option_a">a Volver a colocar la RAM.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q14_option_b" name="q14" value="b">
+                    <label for="q14_option_b">b Reemplazar la motherboard.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q14_option_c" name="q14" value="c">
+                    <label for="q14_option_c">c Reemplazar la batería CMOS.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q14_option_d" name="q14" value="d">
+                    <label for="q14_option_d">d Actualizar el firmware del BIOS.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 15 -->
+        <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">15</span>
+                Un técnico terminó de ensamblar una nueva PC y ahora debe configurar el BIOS. ¿En qué momento se debe presionar una tecla para iniciar el programa de configuración del BIOS?
+            </div>
+            <div class="options" data-question-name="q15">
+                <div class="option">
+                    <input type="radio" id="q15_option_a" name="q15" value="a">
+                    <label for="q15_option_a">a Antes de encender la PC.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q15_option_b" name="q15" value="b">
+                    <label for="q15_option_b">b Durante el proceso de carga de Windows.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q15_option_c" name="q15" value="c">
+                    <label for="q15_option_c">c Durante el POST.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q15_option_d" name="q15" value="d">
+                    <label for="q15_option_d">d Después del POST pero antes de que Windows empiece a cargarse.</label>
+                </div>
+            </div>
+        </div>
+
+         <!-- Question 16 -->
+         <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">16</span>
+                ¿Cómo puede asegurarse el técnico de que la memoria está alineada correctamente?
+            </div>
+            <div class="options" data-question-name="q16">
+                <div class="option">
+                    <input type="radio" id="q16_option_a" name="q16" value="a">
+                    <label for="q16_option_a">a La etiqueta en el módulo de memoria siempre debe estar enfrentada a la CPU.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q16_option_b" name="q16" value="b">
+                    <label for="q16_option_b">b Una muesca en el módulo de memoria debe estar alineada con una muesca en la ranura de memoria.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q16_option_c" name="q16" value="c">
+                    <label for="q16_option_c">c Las flechas en el módulo de memoria deben estar alineadas con las flechas en la ranura de la motherboard.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q16_option_d" name="q16" value="d">
+                    <label for="q16_option_d">d Las ranuras de memoria están codificadas por color: un extremo de color rojo y un extremo de color azul.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 17 -->
+        <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">17</span>
+                ¿Dónde se almacenan los datos de configuración guardados del BIOS?
+            </div>
+            <div class="options" data-question-name="q17">
+                <div class="option">
+                    <input type="radio" id="q17_option_a" name="q17" value="a">
+                    <label for="q17_option_a">a RAM</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q17_option_b" name="q17" value="b">
+                    <label for="q17_option_b">b CMOS</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q17_option_c" name="q17" value="c">
+                    <label for="q17_option_c">c Caché</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q17_option_d" name="q17" value="d">
+                    <label for="q17_option_d">d Disco duro</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 18 -->
+        <div class="question" data-question-type="multiple">
+            <div class="question-text">
+                <span class="question-number">18</span>
+                ¿Cuáles son los dos elementos que se pueden utilizar para establecer un plan de acción al resolver un problema en una PC? (Elija dos opciones).
+            </div>
+            <div class="options" data-question-name="q18">
+                <div class="option">
+                    <input type="checkbox" id="q18_option_a" name="q18" value="a">
+                    <label for="q18_option_a">a Un multímetro</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="q18_option_b" name="q18" value="b">
+                    <label for="q18_option_b">b Una conexión de loopback</label>
+                </div>
+                 <div class="option">
+                    <input type="checkbox" id="q18_option_c" name="q18" value="c">
+                    <label for="q18_option_c">c El manual de la PC</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="q18_option_d" name="q18" value="d">
+                    <label for="q18_option_d">d El historial de reparaciones de la PC</label>
+                </div>
+            </div>
+        </div>
+
+         <!-- Question 19 -->
+         <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">19</span>
+                ¿Qué opción forma parte del desarrollo de un plan de mantenimiento preventivo?
+            </div>
+            <div class="options" data-question-name="q19">
+                <div class="option">
+                    <input type="radio" id="q19_option_a" name="q19" value="a">
+                    <label for="q19_option_a">a Registrar los detalles y la frecuencia de cada tarea de mantenimiento.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q19_option_b" name="q19" value="b">
+                    <label for="q19_option_b">b Realizar actualizaciones de hardware.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q19_option_c" name="q19" value="c">
+                    <label for="q19_option_c">c Desechar todas las partes reemplazadas.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q19_option_d" name="q19" value="d">
+                    <label for="q19_option_d">d Realizar una auditoría forense de infracciones de seguridad.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 20 -->
+        <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">20</span>
+                Durante el proceso de resolución de problemas de una PC que no arranca, se sospecha que el problema se encuentra en los módulos RAM. Se quitan los módulos RAM y se colocan en otra PC, que se enciende correctamente. Luego, se vuelven a colocar los módulos RAM en la PC original, que ahora también se enciende correctamente. ¿Cuál fue la causa más probable del problema?
+            </div>
+            <div class="options" data-question-name="q20">
+                <div class="option">
+                    <input type="radio" id="q20_option_a" name="q20" value="a">
+                    <label for="q20_option_a">a Los módulos RAM tienen bloques defectuosos.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q20_option_b" name="q20" value="b">
+                    <label for="q20_option_b">b Los módulos RAM no estaban bien asentados.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q20_option_c" name="q20" value="c">
+                    <label for="q20_option_c">c Los módulos RAM no eran compatibles con las especificaciones de la PC.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q20_option_d" name="q20" value="d">
+                    <label for="q20_option_d">d Los módulos RAM estaban insertados al revés en las ranuras DIMM.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 21 -->
+        <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">21</span>
+                Un usuario abrió una solicitud en la que indica que en el reloj de la PC se desajusta la hora continuamente. ¿Cuál es la causa más probable del problema?
+            </div>
+            <div class="options" data-question-name="q21">
+                <div class="option">
+                    <input type="radio" id="q21_option_a" name="q21" value="a">
+                    <label for="q21_option_a">a El cristal de sincronización de la motherboard está dañado.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q21_option_b" name="q21" value="b">
+                    <label for="q21_option_b">b El sistema operativo requiere una revisión.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q21_option_c" name="q21" value="c">
+                    <label for="q21_option_c">c La batería CMOS está floja o presenta una falla.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q21_option_d" name="q21" value="d">
+                    <label for="q21_option_d">d Se debe acelerar el reloj de la CPU.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 22 -->
+        <div class="question" data-question-type="multiple">
+            <div class="question-text">
+                <span class="question-number">22</span>
+                ¿Cuáles de las siguientes son dos características de la partición activa de un disco duro? (Elija dos opciones).
+            </div>
+            <div class="options" data-question-name="q22">
+                <div class="option">
+                    <input type="checkbox" id="q22_option_a" name="q22" value="a">
+                    <label for="q22_option_a">a La partición activa debe ser una partición primaria.</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="q22_option_b" name="q22" value="b">
+                    <label for="q22_option_b">b Se pueden marcar como activas hasta cuatro particiones primarias.</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="q22_option_c" name="q22" value="c">
+                    <label for="q22_option_c">c A una partición activa se le debe asignar "C:" como letra de unidad.</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="q22_option_d" name="q22" value="d">
+                    <label for="q22_option_d">d El sistema operativo utiliza la partición activa para arrancar el sistema.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 23 -->
+        <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">23</span>
+                Un técnico cargó un controlador de video incorrecto en una PC con Windows 7. ¿Qué puede hacer el técnico para revertir al controlador anterior?
+            </div>
+            <div class="options" data-question-name="q23">
+                <div class="option">
+                    <input type="radio" id="q23_option_a" name="q23" value="a">
+                    <label for="q23_option_a">a En Herramientas del sistema, seleccionar Crear un punto de restauración.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q23_option_b" name="q23" value="b">
+                    <label for="q23_option_b">b Utilizar regedit para eliminar del registro la información sobre el controlador de gráficos.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q23_option_c" name="q23" value="c">
+                    <label for="q23_option_c">c En Administrador de dispositivos, seleccionar las Propiedades de la tarjeta adaptadora de video, seleccionar la ficha Controlador y hacer clic en Revertir al controlador anterior.</label>
+                </div>
+                 <div class="option">
+                    <input type="radio" id="q23_option_d" name="q23" value="d">
+                    <label for="q23_option_d">d Utilizar el panel de control Dispositivos e impresoras para hacer clic con el botón secundario en el monitor y seleccionar Propiedades. Luego, seleccionar Revertir al controlador anterior.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 24 -->
+        <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">24</span>
+                Un sistema Windows XP no se inicia correctamente. ¿Qué procedimiento se debe realizar para arrancar este sistema en Modo seguro?
+            </div>
+            <div class="options" data-question-name="q24">
+                <div class="option">
+                    <input type="radio" id="q24_option_a" name="q24" value="a">
+                    <label for="q24_option_a">a En el símbolo del sistema, ejecutar el comando shutdown -r -s.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q24_option_b" name="q24" value="b">
+                    <label for="q24_option_b">b Ejecutar la utilidad MSCONFIG y elegir la opción Inicio selectivo.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q24_option_c" name="q24" value="c">
+                    <label for="q24_option_c">c Reiniciar el sistema y presionar Supr o F2, según el sistema.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q24_option_d" name="q24" value="d">
+                    <label for="q24_option_d">d Reiniciar el sistema, mantener presionada la tecla F8 hasta que se muestre un menú y, luego, elegir Modo seguro.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 25 -->
+        <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">25</span>
+                ¿Cuál es la consecuencia de un registro de arranque maestro dañado?
+            </div>
+            <div class="options" data-question-name="q25">
+                <div class="option">
+                    <input type="radio" id="q25_option_a" name="q25" value="a">
+                    <label for="q25_option_a">a No se puede instalar una nueva aplicación.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q25_option_b" name="q25" value="b">
+                    <label for="q25_option_b">b No se puede iniciar el sistema operativo.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q25_option_c" name="q25" value="c">
+                    <label for="q25_option_c">c La impresora no funciona correctamente.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q25_option_d" name="q25" value="d">
+                    <label for="q25_option_d">d El teclado no responde al usuario.</label>
+                </div>
+            </div>
+        </div>
+
+         <!-- Question 26 -->
+         <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">26</span>
+                Una LAN pequeña utiliza una impresora compartida que está conectada a una PC. Ninguno de los usuarios puede imprimir, pero todos pueden tener acceso a los recursos compartidos de la PC a la que la impresora está conectada en forma local. ¿Cuál es una posible causa de este problema?
+            </div>
+            <div class="options" data-question-name="q26">
+                <div class="option">
+                    <input type="radio" id="q26_option_a" name="q26" value="a">
+                    <label for="q26_option_a">a El cable que conecta la impresora a la PC presenta una falla.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q26_option_b" name="q26" value="b">
+                    <label for="q26_option_b">b La impresora necesita una cinta nueva.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q26_option_c" name="q26" value="c">
+                    <label for="q26_option_c">c La cola de impresión de la impresora está completa.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q26_option_d" name="q26" value="d">
+                    <label for="q26_option_d">d Se cargó el papel incorrecto en la impresora.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 27 -->
+        <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">27</span>
+                ¿Qué debe hacer un usuario para instalar una impresora USB nueva en una PC que ejecuta Windows 7 Professional?
+            </div>
+            <div class="options" data-question-name="q27">
+                <div class="option">
+                    <input type="radio" id="q27_option_a" name="q27" value="a">
+                    <label for="q27_option_a">a Conectar la impresora y encenderla. Windows detecta la impresora e instala los controladores necesarios.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q27_option_b" name="q27" value="b">
+                    <label for="q27_option_b">b Copiar el controlador de impresora en la carpeta System32.</label>
+                </div>
+                 <div class="option">
+                    <input type="radio" id="q27_option_c" name="q27" value="c">
+                    <label for="q27_option_c">c Hacer clic en Inicio > Todos los programas > Panel de control > Impresoras y faxes >, hacer clic con el botón secundario en la impresora deseada y elegir Agregar.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q27_option_d" name="q27" value="d">
+                    <label for="q27_option_d">d Configurar el BIOS para que acepte el modelo específico de la impresora en el puerto USB.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 28 -->
+        <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">28</span>
+                Una PC con Windows 7 tiene configuradas varias impresoras en la ventana Dispositivos e impresoras del Panel de control. ¿Cuál impresora elige la PC como primera opción para imprimir?
+            </div>
+            <div class="options" data-question-name="q28">
+                <div class="option">
+                    <input type="radio" id="q28_option_a" name="q28" value="a">
+                    <label for="q28_option_a">a La impresora que se estableció como impresora predeterminada.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q28_option_b" name="q28" value="b">
+                    <label for="q28_option_b">b La impresora de software que se utiliza para crear archivos PDF.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q28_option_c" name="q28" value="c">
+                    <label for="q28_option_c">c La impresora de software que se utiliza para crear archivos XPS.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q28_option_d" name="q28" value="d">
+                    <label for="q28_option_d">d Se elige mediante selección manual, lo cual se necesita siempre.</label>
+                </div>
+            </div>
+        </div>
+
+         <!-- Question 29 -->
+         <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">29</span>
+                ¿Dónde se configuraría el uso compartido de una impresora de red en un entorno de Windows 7?
+            </div>
+            <div class="options" data-question-name="q29">
+                <div class="option">
+                    <input type="radio" id="q29_option_a" name="q29" value="a">
+                    <label for="q29_option_a">a En el Centro de redes y recursos compartidos</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q29_option_b" name="q29" value="b">
+                    <label for="q29_option_b">b En Dispositivos e impresoras</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q29_option_c" name="q29" value="c">
+                    <label for="q29_option_c">c En Impresoras y otro hardware</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q29_option_d" name="q29" value="d">
+                    <label for="q29_option_d">d En el Centro de accesibilidad</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 30 -->
+        <div class="question" data-question-type="single">
+            <div class="question-text">
+                <span class="question-number">30</span>
+                Un técnico reemplaza un disco duro interno que se utiliza como unidad secundaria en una PC. Después de conectar el hardware nuevo y encender la PC, aparece el mensaje de error "No se encuentra OS". ¿Cuál es la causa más probable de dicho mensaje de error?
+            </div>
+            <div class="options" data-question-name="q30">
+                <div class="option">
+                    <input type="radio" id="q30_option_a" name="q30" value="a">
+                    <label for="q30_option_a">a Se debe reemplazar la motherboard para que admita el disco duro nuevo.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q30_option_b" name="q30" value="b">
+                    <label for="q30_option_b">b Se debe actualizar el BIOS.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q30_option_c" name="q30" value="c">
+                    <label for="q30_option_c">c La fuente de energía presenta una falla.</label>
+                </div>
+                <div class="option">
+                    <input type="radio" id="q30_option_d" name="q30" value="d">
+                    <label for="q30_option_d">d El jumper del disco duro se estableció de manera incorrecta.</label>
+                </div>
+            </div>
+        </div>
+
+         <!-- Score Display -->
+         <div id="score-display" class="score-display">
+            Puntuación: 0 de 30
+         </div>
+
+    </div>
+
+    <div class="footer">
+        Hecho con play. Motiva a tu audiencia con tus juegos creados en segundos. Suscribete en com
+    </div>
+
+    <script>
+        // Código JavaScript
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Define Correct Answers ---
+            const correctAnswers = {
+                q1: ['a', 'b'],
+                q2: 'd',
+                q3: ['b', 'd'],
+                q4: ['c', 'd'],
+                q5: 'a',
+                q6: 'a',
+                q7: ['b', 'd'],
+                q8: 'a',
+                q9: 'c',
+                q10: ['a', 'd'],
+                q11: 'b',
+                q12: 'd',
+                q13: 'b',
+                q14: 'c',
+                q15: 'c',
+                q16: 'b',
+                q17: 'b',
+                q18: ['c', 'd'],
+                q19: 'a',
+                q20: 'b',
+                q21: 'c',
+                q22: ['a', 'd'],
+                q23: 'c',
+                q24: 'd',
+                q25: 'b',
+                q26: 'c',
+                q27: 'a',
+                q28: 'a',
+                q29: 'b',
+                q30: 'd'
+            };
+            // --- End Correct Answers ---
+
+            const totalQuestions = Object.keys(correctAnswers).length;
+            const scoreDisplayElement = document.getElementById('score-display');
+            const questions = document.querySelectorAll('.question');
+
+
+            // Function to check and provide feedback for a single question
+            function provideFeedback(questionElement) {
+                const questionName = questionElement.querySelector('.options').dataset.questionName;
+                const questionType = questionElement.dataset.questionType;
+                const correct = correctAnswers[questionName];
+                const options = questionElement.querySelectorAll('.option');
+
+                // Clear previous feedback classes for this question
+                options.forEach(option => {
+                    option.classList.remove('correct', 'incorrect');
+                });
+
+                if (questionType === 'single') {
+                    // Single choice (Radio buttons)
+                    const selectedOption = questionElement.querySelector(`input[name="${questionName}"]:checked`);
+
+                    if (selectedOption) { // Only provide feedback if an option is selected
+                        const selectedValue = selectedOption.value;
+                        const optionElement = selectedOption.closest('.option');
+
+                        if (selectedValue === correct) {
+                            optionElement.classList.add('correct'); // Selected and Correct -> Green
+                        } else {
+                            optionElement.classList.add('incorrect'); // Selected and Incorrect -> Red
+                            // ALSO highlight the correct answer in green
+                            const correctAnswerElement = questionElement.querySelector(`input[value="${correct}"]`).closest('.option');
+                             if (correctAnswerElement) { // Ensure element exists
+                                correctAnswerElement.classList.add('correct');
+                             }
+                        }
+                    }
+                    // If no option is selected, no feedback is shown for this question yet
+
+                } else if (questionType === 'multiple') {
+                    // Multiple choice (Checkbox buttons)
+                    const selectedInputs = Array.from(questionElement.querySelectorAll(`input[name="${questionName}"]:checked`));
+                    const selectedValues = selectedInputs.map(input => input.value);
+                    const anySelected = selectedInputs.length > 0; // Check if *any* checkboxes are checked
+
+
+                    if (anySelected) { // Only provide feedback if at least one option is selected
+                         options.forEach(option => {
+                             const input = option.querySelector('input');
+                             const optionValue = input.value;
+                             const isSelected = selectedValues.includes(optionValue);
+                             const isCorrectOption = correct.includes(optionValue);
+
+                             if (isSelected) {
+                                  if (isCorrectOption) {
+                                      option.classList.add('correct'); // Correct and selected -> Green
+                                  } else {
+                                      option.classList.add('incorrect'); // Incorrect and selected -> Red
+                                  }
+                              } else if (isCorrectOption) {
+                                   // If not selected but is a correct answer, show it in green
+                                   // This helps guide the user in multiple choice if they got it wrong overall
+                                    option.classList.add('correct');
+                              }
+                              // If not selected and not correct, no class is added (neutral)
+                         });
+                    }
+                    // If no checkboxes are selected, no feedback is shown yet
+                }
+            }
+
+            // Function to calculate and update the score
+            function updateScore() {
+                let correctCount = 0;
+
+                questions.forEach(questionElement => {
+                    const questionName = questionElement.querySelector('.options').dataset.questionName;
+                    const questionType = questionElement.dataset.questionType;
+                    const correct = correctAnswers[questionName];
+
+                    if (questionType === 'single') {
+                        const selectedOption = questionElement.querySelector(`input[name="${questionName}"]:checked`);
+                        if (selectedOption && selectedOption.value === correct) {
+                            correctCount++;
+                        }
+                    } else if (questionType === 'multiple') {
+                        const selectedInputs = Array.from(questionElement.querySelectorAll(`input[name="${questionName}"]:checked`));
+                        const selectedValues = selectedInputs.map(input => input.value);
+
+                        // A multiple choice question is correct ONLY if the selected options EXACTLY match the correct ones
+                        const isExactlyCorrect = selectedValues.length === correct.length &&
+                                                 selectedValues.every(val => correct.includes(val)) &&
+                                                 correct.every(val => selectedValues.includes(val));
+
+                        if (isExactlyCorrect) {
+                            correctCount++;
+                        }
+                    }
+                });
+
+                scoreDisplayElement.textContent = `Puntuación: ${correctCount} de ${totalQuestions}`;
+            }
+
+
+            // Add event listeners to all radio and checkbox inputs
+            const inputs = document.querySelectorAll('.quiz-container input[type="radio"], .quiz-container input[type="checkbox"]');
+
+            inputs.forEach(input => {
+                input.addEventListener('change', (event) => {
+                    const questionElement = event.target.closest('.question');
+                    if (questionElement) {
+                        provideFeedback(questionElement); // Provide feedback for the changed question
+                        updateScore(); // Recalculate and update the total score
+                    }
+                });
+            });
+
+            // Initial score calculation on page load (should be 0 if no inputs are pre-checked)
+            updateScore();
+
+            // NOTE: Feedback is ONLY shown after a user interacts with a question.
+            // This prevents the issue of all correct answers being highlighted green initially.
+
+        });
+    </script>
+</body>
+</html>
