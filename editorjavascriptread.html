@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor para JavaScript Interactivo</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        textarea {
+            width: 90%;
+            height: 200px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-bottom: 10px; /* Añadir margen inferior */
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+         .button-group {
+             display: flex;
+             gap: 10px; /* Espacio entre los botones */
+             margin-bottom: 10px;
+         }
+        .resultado {
+            margin-top: 20px;
+            width: 90%;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+            white-space: pre-wrap; /* Para mantener los saltos de línea y espacios */
+            min-height: 50px; /* Altura mínima para el área de resultado */
+        }
+         .input-container {
+            margin-top: 10px;
+            width: 90%;
+            display: none; /* Oculto inicialmente */
+            flex-direction: column;
+            align-items: flex-start;
+         }
+         .input-container label {
+             margin-bottom: 5px;
+             font-weight: bold;
+         }
+         .input-container input[type="text"] {
+            width: 100%; /* Ajustar al ancho del contenedor */
+            padding: 8px;
+            border: 1px solid #ccc;
+            box-sizing: border-box; /* Para incluir padding y border en el ancho */
+            margin-bottom: 5px;
+         }
+
+        iframe {
+            display: none; /* Ocultamos el iframe ya que no queremos verlo visualmente */
+            width: 0;
+            height: 0;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Editor para JavaScript Interactivo </h1>
+
+    <textarea id="javascriptCode" placeholder="Escribe tu código JavaScript aquí..."></textarea>
+
+    <div class="button-group">
+        <button onclick="ejecutarCodigo()">Ejecutar Código</button>
+        <button onclick="limpiarResultado()">Limpiar Resultado</button>
+    </div>
+
+    <div class="input-container" id="inputContainer">
+        <label id="inputLabel" for="userInput"></label>
+        <input type="text" id="userInput">
+        <button onclick="enviarEntrada()">Enviar</button>
+    </div>
+
+    <h2>Resultado:</h2>
+    <pre class="resultado" id="output"></pre>
+
+    <!-- Iframe oculto para ejecutar el código de forma aislada -->
+    <iframe id="sandbox"></iframe>
+
+    <script>
+        const outputElement = document.getElementById('output');
+        const inputContainer = document.getElementById('inputContainer');
+        const inputLabel = document.getElementById('inputLabel');
+        const userInput = document.getElementById('userInput');
+        const sandbox = document.getElementById('sandbox');
+
+        function ejecutarCodigo() {
+            const codigo = document.getElementById('javascriptCode').value;
+
+            // Limpiar la entrada anterior si estaba visible
+            inputContainer.style.display = 'none';
+            userInput.value = '';
+            inputLabel.textContent = '';
+
+            // Reiniciar el contenido del iframe
+            sandbox.contentDocument.open();
+            sandbox.contentDocument.write('');
+            sandbox.contentDocument.close();
+
+            // Redirigir console.log, manejar errores y SIMULAR prompt
+            const scriptTag = `
+                <script>
+                    // Redirigir console.log al padre
+                    const originalConsoleLog = console.log;
+                    console.log = function(...args) {
+                        let message = args.map(arg => {
+                            if (typeof arg === 'object') {
+                                try {
+                                    // Usar JSON.stringify con indentación para objetos
+                                    return JSON.stringify(arg, null, 2);
+                                } catch (e) {
+                                    return String(arg);
+                                }
+                            }
+                            return String(arg);
+                        }).join(' ');
+                        window.parent.postMessage({ type: 'log', message: message }, '*');
+                        // originalConsoleLog.apply(console, args); // Opcional: también loguear en la consola del iframe
+                    };
+
+                    // Manejar errores no capturados
+                    window.onerror = function(message, source, lineno, colno, error) {
+                        window.parent.postMessage({ type: 'error', message: \`Error: \${message} at line \${lineno}\` }, '*');
+                         // Opcional: Enviar un mensaje para ocultar la entrada si estaba esperando
+                        window.parent.postMessage({ type: 'hideInput' }, '*');
+                        return true; // Evita que el error se muestre en la consola del navegador principal
+                    };
+
+                    // SIMULAR la función prompt
+                    // Devuelve una Promesa que se resolverá cuando el usuario ingrese datos en el padre
+                    function prompt(text) {
+                        return new Promise((resolve) => {
+                            window.parent.postMessage({ type: 'prompt', text: text }, '*');
+
+                            // Esperar a un mensaje específico de respuesta del padre
+                            const handleResponse = (event) => {
+                                if (event.data.type === 'promptResponse') {
+                                    window.removeEventListener('message', handleResponse); // Remover el listener después de usarlo
+                                    resolve(event.data.value); // Resolver la Promesa con el valor del usuario
+                                }
+                            };
+                            window.addEventListener('message', handleResponse);
+                        });
+                    }
+
+                    // Redefinir 'prompt' globalmente en el iframe (opcional, pero útil si el código usa 'prompt')
+                    window.prompt = prompt;
+
+                    // Usar una IIFE (Immediately Invoked Function Expression) asíncrona
+                    // para poder usar await si el código del usuario lo necesita (por ejemplo, con nuestro prompt simulado)
+                    (async function() {
+                        try {
+                           ${codigo}
+                           // Si el código termina sin error, ocultar la entrada si estaba visible
+                           window.parent.postMessage({ type: 'hideInput' }, '*');
+                        } catch (e) {
+                           window.parent.postMessage({ type: 'error', message: \`Error de ejecución: \${e.message}\` }, '*');
+                           window.parent.postMessage({ type: 'hideInput' }, '*');
+                        }
+                    })(); // Llama a la función inmediatamente
+                <\/script>
+            `;
+
+            // Escribir el script en el iframe
+            sandbox.contentDocument.write(scriptTag);
+        }
+
+        // Escuchar mensajes del iframe (en la página principal)
+        window.onmessage = function(event) {
+            if (event.data.type === 'log') {
+                outputElement.textContent += event.data.message + '\n';
+                 // Asegurarse de desplazar hacia abajo si el contenido es largo
+                 outputElement.scrollTop = outputElement.scrollHeight;
+            } else if (event.data.type === 'error') {
+                 outputElement.textContent += event.data.message + '\n';
+                  // Asegurarse de desplazar hacia abajo si el contenido es largo
+                 outputElement.scrollTop = outputElement.scrollHeight;
+            } else if (event.data.type === 'prompt') {
+                // El iframe ha solicitado una entrada del usuario
+                inputContainer.style.display = 'flex'; // Mostrar el contenedor de entrada
+                inputLabel.textContent = event.data.text || 'Ingresa tu respuesta:'; // Mostrar el texto de la pregunta
+                userInput.focus(); // Poner el foco en el campo de entrada
+            } else if (event.data.type === 'hideInput') {
+                 // El iframe ha terminado (con error o normal) y ya no necesita la entrada
+                 inputContainer.style.display = 'none';
+                 userInput.value = '';
+                 inputLabel.textContent = '';
+            }
+        };
+
+        // Manejar la tecla Enter en el campo de entrada
+        userInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Evitar el comportamiento predeterminado del Enter (enviar formulario)
+                enviarEntrada();
+            }
+        });
+
+        // Función para enviar la entrada del usuario de vuelta al iframe
+        function enviarEntrada() {
+            const inputValue = userInput.value;
+            inputContainer.style.display = 'none'; // Ocultar el contenedor de entrada
+            userInput.value = ''; // Limpiar el campo de entrada
+            inputLabel.textContent = ''; // Limpiar la etiqueta
+
+            // Enviar la entrada de vuelta al iframe
+            sandbox.contentWindow.postMessage({ type: 'promptResponse', value: inputValue }, '*');
+        }
+
+        function limpiarResultado() {
+             outputElement.textContent = '';
+        }
+    </script>
+
+</body>
+</html>
