@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de JavaScript</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        textarea {
+            width: 90%;
+            height: 200px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .resultado {
+            margin-top: 20px;
+            width: 90%;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+            white-space: pre-wrap; /* Para mantener los saltos de línea y espacios */
+        }
+        iframe {
+            display: none; /* Ocultamos el iframe ya que no queremos verlo visualmente */
+            width: 0;
+            height: 0;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Editor de JavaScript para Práctica</h1>
+
+    <textarea id="javascriptCode" placeholder="Escribe tu código JavaScript aquí..."></textarea>
+
+    <button onclick="ejecutarCodigo()">Ejecutar Código</button>
+
+    <h2>Resultado:</h2>
+    <pre class="resultado" id="output"></pre>
+
+    <!-- Iframe oculto para ejecutar el código de forma aislada -->
+    <iframe id="sandbox"></iframe>
+
+    <script>
+        function ejecutarCodigo() {
+            const codigo = document.getElementById('javascriptCode').value;
+            const outputElement = document.getElementById('output');
+            const sandbox = document.getElementById('sandbox');
+
+            // Reiniciar el contenido del iframe
+            sandbox.contentDocument.open();
+            sandbox.contentDocument.write('');
+            sandbox.contentDocument.close();
+
+            // Redirigir console.log y otros mensajes al elemento de salida
+            const scriptTag = `
+                <script>
+                    // Redirigir console.log al padre
+                    const originalConsoleLog = console.log;
+                    console.log = function(...args) {
+                        let message = args.map(arg => {
+                            if (typeof arg === 'object') {
+                                try {
+                                    return JSON.stringify(arg, null, 2);
+                                } catch (e) {
+                                    return String(arg);
+                                }
+                            }
+                            return String(arg);
+                        }).join(' ');
+                        window.parent.postMessage({ type: 'log', message: message }, '*');
+                        originalConsoleLog.apply(console, args); // Opcional: también loguear en la consola del iframe
+                    };
+
+                    // Manejar errores no capturados
+                    window.onerror = function(message, source, lineno, colno, error) {
+                        window.parent.postMessage({ type: 'error', message: \`Error: \${message} at line \${lineno}\` }, '*');
+                        return true; // Evita que el error se muestre en la consola del navegador principal
+                    };
+
+                    try {
+                        ${codigo}
+                    } catch (e) {
+                         window.parent.postMessage({ type: 'error', message: \`Error de ejecución: \${e.message}\` }, '*');
+                    }
+                <\/script>
+            `;
+
+            // Escribir el script en el iframe
+            sandbox.contentDocument.write(scriptTag);
+
+            // Escuchar mensajes del iframe
+            window.onmessage = function(event) {
+                if (event.data.type === 'log') {
+                    outputElement.textContent += event.data.message + '\n';
+                } else if (event.data.type === 'error') {
+                     outputElement.textContent += event.data.message + '\n';
+                }
+            };
+
+            // Limpiar el contenido anterior del resultado
+            outputElement.textContent = '';
+        }
+    </script>
+
+</body>
+</html>
