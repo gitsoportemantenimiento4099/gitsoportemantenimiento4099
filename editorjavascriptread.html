@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editor JS con Entrada Paso a Paso</title>
+    <title>Editor JS con Vista Previa HTML</title>
     <style>
         body {
             font-family: sans-serif;
@@ -10,42 +10,51 @@
             flex-direction: column;
             align-items: center;
             padding: 20px;
+            background-color: #f0f2f5;
         }
+        h1, h2 { color: #333; }
+        
         textarea {
             width: 90%;
-            height: 200px;
-            margin-bottom: 10 estilo */
+            height: 150px;
+            margin-bottom: 10px;
             padding: 10px;
             border: 1px solid #ccc;
             font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
             font-size: 14px;
+            border-radius: 4px;
+            resize: vertical;
         }
+
         .input-area {
             width: 90%;
             margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #eee;
-            background-color: #f9f9f9;
+            padding: 15px;
+            border: 1px solid #c3e6cb;
+            background-color: #d4edda;
             display: none; /* Inicialmente oculto */
             flex-direction: column;
+            border-radius: 5px;
         }
         .input-area label {
             margin-bottom: 5px;
             font-weight: bold;
+            color: #155724;
         }
         .input-area input {
             padding: 8px;
             border: 1px solid #ccc;
             margin-bottom: 10px;
+            border-radius: 4px;
         }
         .input-area button {
             padding: 8px 15px;
-            background-color: #28a745; /* Color verde */
+            background-color: #28a745;
             color: white;
             border: none;
             cursor: pointer;
             border-radius: 5px;
-            align-self: flex-end; /* Alinea el botón a la derecha */
+            align-self: flex-end;
         }
         .input-area button:hover {
             background-color: #218838;
@@ -53,290 +62,260 @@
 
         .button-container {
             width: 90%;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             display: flex;
-            justify-content: center; /* Centra los botones */
-            gap: 10px; /* Espacio entre botones */
+            justify-content: center;
+            gap: 10px;
         }
 
-        button {
+        button.main-btn {
             padding: 10px 20px;
             background-color: #007bff;
             color: white;
             border: none;
             cursor: pointer;
             border-radius: 5px;
+            font-size: 16px;
         }
-        button:hover {
+        button.main-btn:hover {
             background-color: #0056b3;
         }
-         button.reset-button {
-            background-color: #dc3545; /* Color rojo */
+        button.reset-button {
+            padding: 10px 20px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
         }
-         button.reset-button:hover {
+        button.reset-button:hover {
             background-color: #c82333;
         }
 
+        /* Consola de texto */
         .resultado {
-            margin-top: 10px;
+            margin-top: 5px;
             width: 90%;
-            border: 1px solid #ccc;
+            border: 1px solid #333;
             padding: 10px;
-            background-color: #f9f9f9;
+            background-color: #222;
+            color: #0f0; /* Texto verde tipo hacker */
+            font-family: monospace;
             white-space: pre-wrap;
-            min-height: 50px;
-            overflow-y: auto; /* Añadir scroll si el contenido es muy largo */
-            max-height: 300px; /* Altura máxima opcional */
+            height: 100px; /* Altura fija */
+            overflow-y: auto;
+            border-radius: 4px;
         }
-        /* Contenedor para el iframe, lo necesitamos para reemplazarlo */
+
+        /* --- NUEVO ESTILO PARA EL CONTENEDOR VISIBLE --- */
         #iframe-container {
-             display: none; /* Sigue oculto */
-             width: 0;
-             height: 0;
+             display: block; /* Hacemos visible el bloque */
+             width: 90%;
+             height: 300px; /* Altura para ver el HTML */
+             border: 2px solid #999;
+             background-color: white;
+             margin-top: 10px;
+             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+             border-radius: 4px;
+             overflow: hidden; /* Para que el iframe no se salga */
+        }
+        
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        .section-label {
+            width: 90%;
+            text-align: left;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #555;
         }
 
     </style>
 </head>
 <body>
 
-    <h1>Editor JS con Entrada Paso a Paso</h1>
+    <h1>Editor JS + Vista HTML</h1>
 
-    <textarea id="javascriptCode" placeholder="Escribe tu código JavaScript aquí..."></textarea>
+    <textarea id="javascriptCode" spellcheck="false">// Ejemplo: Interactuando con HTML y Consola
+
+console.log("Iniciando aplicación...");
+
+// 1. Modificar el HTML visible
+document.body.style.fontFamily = "sans-serif";
+document.body.style.padding = "20px";
+document.body.innerHTML = `
+  <h1 style='color: blue'>Hola Mundo HTML</h1>
+  <p>Esto se genera desde JavaScript.</p>
+  <div id='caja' style='background: #eee; padding: 10px;'>Esperando input...</div>
+`;
+
+// 2. Usar la función paso a paso
+let nombre = await solicitarEntrada("¿Cuál es tu nombre?");
+
+console.log("Nombre recibido: " + nombre);
+
+// 3. Actualizar el HTML con el dato
+document.getElementById('caja').innerHTML = 
+  "Bienvenido, <b>" + nombre + "</b>!";
+document.getElementById('caja').style.backgroundColor = "#d1ecf1";
+</textarea>
 
      <div class="button-container">
-        <button id="ejecutarButton" onclick="ejecutarCodigo()">Ejecutar Código</button>
+        <button id="ejecutarButton" class="main-btn" onclick="ejecutarCodigo()">Ejecutar Código</button>
         <button class="reset-button" onclick="resetEditor()">Reiniciar</button>
      </div>
-
 
     <!-- Área para entradas dinámicas -->
     <div id="dynamicInputArea" class="input-area">
         <label id="inputLabel" for="dynamicInput">Introduce un valor:</label>
-        <input type="text" id="dynamicInput">
+        <input type="text" id="dynamicInput" autocomplete="off">
         <button onclick="enviarEntrada()">Enviar</button>
     </div>
 
-
-    <h2>Resultado:</h2>
+    <div class="section-label">Consola (Logs):</div>
     <pre class="resultado" id="output"></pre>
 
-    <!-- Contenedor para el Iframe oculto -->
+    <div class="section-label">Vista Previa HTML (Resultado Visual):</div>
+    <!-- Contenedor para el Iframe VISIBLE -->
     <div id="iframe-container">
         <!-- El iframe se creará dinámicamente aquí -->
     </div>
 
 
     <script>
-        // Variables de estado del editor principal
-        let currentCode = ''; // Se usará para almacenar el código leído del textarea *al inicio* de una ejecución
-        let executionPaused = false; // Indica si la ejecución en el iframe está esperando una entrada
-        let currentPromiseId = null; // Almacena el ID de la promesa que espera la entrada en el iframe
-
-        // Referencia al contenedor del iframe
+        let currentCode = ''; 
+        let executionPaused = false; 
+        let currentPromiseId = null; 
         const iframeContainer = document.getElementById('iframe-container');
-        // La referencia al iframe en sí cambiará cada vez que lo reemplacemos.
-        let sandboxIframe = null; // Inicialmente no hay iframe
+        let sandboxIframe = null; 
 
-        // ** Importante: Este listener se agrega UNA SOLA VEZ al cargar la página **
-        // Escuchará los mensajes que envíe CUALQUIER iframe al padre.
-        // Dentro del handler, verificamos si el mensaje viene de nuestro iframe *actual*.
         window.addEventListener('message', handleIframeMessage);
 
-
-        // ** Función para resetear el editor a un estado inicial para una NUEVA ejecución del CÓDIGO EXISTENTE **
         function resetEditor() {
             console.log("Iniciando resetEditor...");
 
-            // 1. Limpiar el área visible de resultado
             document.getElementById('output').textContent = '';
-            document.getElementById('output').scrollTop = 0; // Volver al inicio del scroll
+            document.getElementById('output').scrollTop = 0;
 
-            // 2. **ASEGURARSE DE NO LIMPIAR EL CONTENIDO DEL TEXTAREA DEL CÓDIGO**
-            // ESTA LÍNEA HA SIDO ELIMINADA INTENCIONALMENTE Y DEBE QUEDAR FUERA:
-            // document.getElementById('javascriptCode').value = ''; // <-- ¡Esta línea NO está presente!
-
-            // 3. Ocultar y limpiar el área de entrada dinámica
             document.getElementById('dynamicInputArea').style.display = 'none';
-            document.getElementById('dynamicInput').value = ''; // Limpiar el campo de entrada
+            document.getElementById('dynamicInput').value = ''; 
 
-            // 4. Restaurar el texto del botón principal a "Ejecutar Código"
-            const ejecutarButton = document.getElementById('ejecutarButton'); // Usar el ID
+            const ejecutarButton = document.getElementById('ejecutarButton');
             ejecutarButton.textContent = 'Ejecutar Código';
+            
+            // Habilitar el botón de nuevo por si estaba deshabilitado
+            ejecutarButton.disabled = false;
+            ejecutarButton.style.opacity = "1";
 
-            // 5. Resetear las variables de estado del editor principal
-            currentCode = ''; // Limpiamos esto, ya que se leerá del textarea al ejecutar
-            executionPaused = false; // No hay ejecución pausada esperando entrada
-            currentPromiseId = null; // Limpiar cualquier ID de promesa pendiente
+            currentCode = ''; 
+            executionPaused = false; 
+            currentPromiseId = null; 
 
-            // 6. **REEMPLAZAR EL IFRAME PARA GARANTIZAR UN ENTORNO COMPLETAMENTE NUEVO**
-            // Esta es la técnica robusta de Stack Overflow que garantiza un estado fresco.
             if (sandboxIframe) {
                  try {
-                     // Eliminar el iframe existente del DOM
                      iframeContainer.removeChild(sandboxIframe);
-                     console.log("Iframe existente removido.");
                  } catch (e) {
-                     console.codeerror("Error al remover el iframe existente:", e);
-                     // Si falla la remoción, podríamos dejarlo y la creación de uno nuevo
-                     // quizás lo maneje, pero reportamos el error.
+                     console.error("Error al remover iframe:", e);
                  }
             }
 
-            // Crear un nuevo elemento iframe
             const newIframe = document.createElement('iframe');
-            newIframe.id = 'sandbox'; // Darle el ID que esperamos
-            // Las propiedades de estilo para que esté oculto están en el CSS para iframe,
-            // pero podemos asegurarnos aquí también si queremos:
-            newIframe.style.display = 'none';
-            newIframe.style.width = '0';
-            newIframe.style.height = '0';
-            newIframe.style.border = 'none';
-
-            // Añadir el nuevo iframe al contenedor
+            newIframe.id = 'sandbox'; 
+            
+            // --- CAMBIO IMPORTANTE: NO OCULTAMOS EL IFRAME ---
+            // Eliminamos style.display = 'none' y width/height = 0
+            // Ahora el iframe tomará el tamaño del CSS #iframe-container iframe
+            
             iframeContainer.appendChild(newIframe);
-
-            // Actualizar nuestra referencia global al iframe
             sandboxIframe = newIframe;
 
-            console.log("Nuevo iframe sandbox creado y añadido al DOM.");
-            console.log("Editor reiniciado. El código en el textarea se mantiene intacto listo para ejecutar de nuevo.");
+            console.log("Nuevo entorno HTML/JS listo.");
         }
 
 
-        // ** Función principal para ejecutar/continuar el código **
         async function ejecutarCodigo() {
             const outputElement = document.getElementById('output');
             const dynamicInputArea = document.getElementById('dynamicInputArea');
-            const dynamicInput = document.getElementById('dynamicInput');
-            const ejecutarButton = document.getElementById('ejecutarButton'); // Usar el ID
+            const ejecutarButton = document.getElementById('ejecutarButton');
 
-
-            // Si la ejecución NO está pausada, significa que queremos iniciar una NUEVA ejecución.
-            // Si SÍ está pausada, significa que estamos intentando "continuar" apretando el botón,
-            // lo cual manejamos llamando a enviarEntrada().
             if (!executionPaused) {
                 console.log("Iniciando nueva ejecución...");
-                // 1. Leer el código actual del textarea
-                currentCode = document.getElementById('javascriptCode').value; // *** SIEMPRE LEEMOS DEL TEXTAREA AL INICIO ***
+                currentCode = document.getElementById('javascriptCode').value; 
 
-                // 2. Si el código está vacío o solo tiene espacios en blanco, no hacemos nada
                 if (!currentCode.trim()) {
-                     console.warn("No hay código para ejecutar.");
                      outputElement.textContent = "No hay código para ejecutar.";
-                     outputElement.scrollTop = outputElement.scrollHeight;
-                     return; // Salir de la función si el textarea está vacío
+                     return; 
                 }
 
-                // 3. Ocultar el área de entrada dinámica (por si acaso)
                 dynamicInputArea.style.display = 'none';
+                
+                // Aseguramos iframe limpio
+                resetEditor(); 
 
-                // 4. Asegurarse de que haya un iframe sandbox disponible y listo.
-                // Si no existe o fue removido, resetEditor() lo creará.
-                // Sin embargo, es más limpio llamar a resetEditor() para preparar el estado
-                // y el iframe antes de una *nueva* ejecución.
-                // Podríamos llamar a resetEditor() aquí si queremos garantizar la limpieza total
-                // incluso si el usuario aprieta Ejecutar sin haber reseteado explícitamente.
-                 // resetEditor(); // <-- Opcional: Llamar aquí para garantizar siempre un iframe fresco al iniciar
-
-                // Si elegimos no llamar resetEditor() aquí, debemos asegurarnos de que el iframe
-                // exista. Si sandboxIframe es null, debemos crearlo.
-                if (!sandboxIframe || !document.body.contains(sandboxIframe)) {
-                     console.warn("Iframe sandbox no encontrado o no en el DOM. Creando uno nuevo...");
-                     resetEditor(); // La forma más fácil de asegurar que haya un iframe nuevo
-                 }
-
-                // 5. Inyectar el script base y el código del usuario en el iframe.
-                 // Damos un pequeño margen (aunque open/write/close suele ser síncrono)
-                 // para asegurarnos de que el iframe esté listo antes de inyectar.
-                 // Usamos setTimeout(0) para poner la inyección al final de la cola de eventos actual.
                  setTimeout(() => {
-                     // Asegurarse de que sandboxIframe.contentDocument sea accesible
                      if (!sandboxIframe || !sandboxIframe.contentDocument) {
-                         console.error("Error: sandboxIframe o contentDocument no accesible después de la creación/limpieza.");
-                         outputElement.textContent += '\nError: El entorno de ejecución no está listo.';
-                         outputElement.scrollTop = outputElement.scrollHeight;
-                         return; // Salir si el iframe no está listo
+                         outputElement.textContent += '\nError: El entorno no está listo.';
+                         return; 
                      }
 
-                    // Proceder a escribir el script base y el código del usuario
                     const scriptTag = `
                         <script>
-                            // Mapa para almacenar funciones resolve de promesas pendientes (dentro del iframe)
                             window._pendingPromises = {};
-                            let promiseCounter = 0; // Contador simple para identificadores de promesas
+                            let promiseCounter = 0; 
 
-                            // Redirigir console.log al padre (la ventana principal)
                             const originalConsoleLog = console.log;
                             console.log = function(...args) {
                                 let message = args.map(arg => {
                                     if (typeof arg === 'object' && arg !== null) {
-                                        try {
-                                            const cache = new Set();
-                                            return JSON.stringify(arg, (key, value) => {
-                                                if (typeof value === 'object' && value !== null) {
-                                                    if (cache.has(value)) {
-                                                        return '[Circular]';
-                                                    }
-                                                    cache.add(value);
-                                                }
-                                                return value;
-                                            }, 2);
-                                        } catch (e) {
-                                            // console.error('Error stringifying object in iframe console.log:', e, arg);
-                                            return String(arg);
-                                        }
+                                        try { return JSON.stringify(arg, null, 2); } 
+                                        catch (e) { return String(arg); }
                                     }
                                     return String(arg);
                                 }).join(' ');
-
                                 window.parent.postMessage({ type: 'log', message: message }, '*');
                             };
 
-                            // Manejar errores no capturados dentro del iframe
                             window.onerror = function(message, source, lineno, colno, error) {
-                                window.parent.postMessage({ type: 'error', message: \`Error: \${message} at line \${lineno}\` }, '*');
-                                // console.error(\`Iframe Error: \${message} at \${source}:\${lineno}:\${colno}\`, error);
+                                window.parent.postMessage({ type: 'error', message: \`Error: \${message} en línea \${lineno}\` }, '*');
                                 return true;
                             };
 
-                            // ** Función simulada para solicitar entrada **
                             window.solicitarEntrada = async function(mensaje = 'Introduce un valor:') {
                                 const promiseId = 'promise_' + promiseCounter++;
                                 const promise = new Promise(resolve => {
                                     window._pendingPromises[promiseId] = { resolve: resolve };
                                 });
-
                                 window.parent.postMessage({ type: 'solicitar_entrada', mensaje: mensaje, promiseId: promiseId }, '*');
-
                                 return promise;
                             };
 
-                            // ** Listener dentro del iframe para recibir la entrada del padre **
                             window.addEventListener('message', function(event) {
                                 const data = event.data;
-                                if (event.source === window.parent) { // Asegurar origen
+                                if (event.source === window.parent) { 
                                     if (data.type === 'entrada_recibida') {
                                         const promiseId = data.promiseId;
                                         const value = data.value;
-
                                         if (window._pendingPromises && window._pendingPromises[promiseId]) {
                                             const resolve = window._pendingPromises[promiseId].resolve;
-                                            delete window._pendingPromises[promiseId]; // Limpiar
-                                            resolve(value); // Resuelve la promesa
-                                        } else {
-                                            console.error('Iframe: No se encontró la promesa pendiente con ID', promiseId);
+                                            delete window._pendingPromises[promiseId]; 
+                                            resolve(value); 
                                         }
                                     }
                                 }
                             });
 
-                            // ** Ejecutar el código del usuario **
                             (async () => {
                                 try {
-                                    console.log("Ejecutando código...");
-                                    // *** CÓDIGO DEL USUARIO INYECTADO AQUÍ ***
+                                    // NO limpiamos el body aquí para permitir que el JS escriba sobre blanco
+                                    console.log("Ejecutando...");
                                     ${currentCode}
-                                    console.log("Ejecución completa.");
+                                    console.log("Ejecución finalizada.");
                                 } catch (e) {
                                     window.parent.postMessage({ type: 'error', message: \`Error de ejecución: \${e.message}\` }, '*');
                                 } finally {
@@ -346,62 +325,41 @@
                         <\/script>
                     `;
                      try {
-                          // Escribir el script tag en el iframe
-                          // Usamos sandboxIframe.contentDocument para interactuar con el documento del nuevo iframe
                           sandboxIframe.contentDocument.open();
                           sandboxIframe.contentDocument.write(scriptTag);
                           sandboxIframe.contentDocument.close();
-
                      } catch (e) {
-                         console.error("Error al escribir script en el iframe:", e);
-                         outputElement.textContent += '\nError crítico: No se pudo inyectar el código en el entorno de ejecución.';
-                         outputElement.scrollTop = outputElement.scrollHeight;
-                         dynamicInputArea.style.display = 'none';
-                         ejecutarButton.textContent = 'Ejecutar Código';
-                         executionPaused = false;
-                         currentPromiseId = null;
+                         console.error("Error inject:", e);
+                         outputElement.textContent += '\nError crítico al inyectar código.';
                      }
-                 }, 0); // Pequeño retraso
+                 }, 50);
 
             } else {
-                // Si está pausado (esperando entrada), procesamos el envío de entrada.
-                // El botón principal, al estar pausado, llama a ejecutarCodigo(),
-                // lo que nos trae a esta rama else.
-                 console.log("Botón principal presionado mientras está pausado. Procesando como envío de entrada.");
-                 enviarEntrada(); // Procesa el valor del campo de entrada
+                 enviarEntrada(); 
             }
         }
 
-        // ** Manejador de mensajes recibidos del iframe sandbox **
         function handleIframeMessage(event) {
             const data = event.data;
             const outputElement = document.getElementById('output');
             const dynamicInputArea = document.getElementById('dynamicInputArea');
             const inputLabel = document.getElementById('inputLabel');
             const dynamicInput = document.getElementById('dynamicInput');
-            const ejecutarButton = document.getElementById('ejecutarButton'); // Botón principal
+            const ejecutarButton = document.getElementById('ejecutarButton');
 
-            // ** Importante: Verificar que el mensaje provenga de nuestro iframe *actual* **
-            // Comparamos event.source con nuestra referencia global actual al iframe.
-             if (!sandboxIframe || event.source !== sandboxIframe.contentWindow) {
-                 // Ignorar mensajes si no hay un iframe activo o si el mensaje viene de otro lugar
-                 // console.log("Mensaje ignorado de origen desconocido o iframe inactivo:", event);
-                 return;
-             }
+             if (!sandboxIframe || event.source !== sandboxIframe.contentWindow) return;
 
-            // Procesar el tipo de mensaje recibido
             if (data.type === 'log') {
-                outputElement.textContent += data.message + '\n';
+                outputElement.textContent += '> ' + data.message + '\n';
                 outputElement.scrollTop = outputElement.scrollHeight;
 
             } else if (data.type === 'error') {
-                 outputElement.textContent += 'ERROR: ' + data.message + '\n';
+                 outputElement.textContent += '❌ ' + data.message + '\n';
                  outputElement.scrollTop = outputElement.scrollHeight;
                  dynamicInputArea.style.display = 'none';
                  ejecutarButton.textContent = 'Ejecutar Código';
-                 executionPaused = false; // Permitir nueva ejecución
+                 executionPaused = false; 
                  currentPromiseId = null;
-                 console.error("Ejecución detenida por error en el iframe.", data.message);
 
             } else if (data.type === 'solicitar_entrada') {
                 executionPaused = true;
@@ -410,43 +368,28 @@
                 dynamicInputArea.style.display = 'flex';
                 dynamicInput.value = '';
                 dynamicInput.focus();
-                ejecutarButton.textContent = 'Continuar con Entrada'; // Cambiar texto del botón principal
+                ejecutarButton.textContent = 'Enviar Entrada'; // Botón cambia de función visualmente
 
             } else if (data.type === 'ejecucion_completa') {
-                 console.log("Iframe: Señal de ejecución completa/pausa resuelta recibida.");
                  dynamicInputArea.style.display = 'none';
                  ejecutarButton.textContent = 'Ejecutar Código';
-                 executionPaused = false; // Permitir nueva ejecución
+                 executionPaused = false; 
                  currentPromiseId = null;
-                 console.log("Editor principal: Listo para una nueva ejecución.");
             }
         }
 
-
-        // ** Función para enviar la entrada del usuario al iframe **
-        // Llamada por el botón "Enviar" y la tecla Enter.
         function enviarEntrada() {
             const dynamicInputArea = document.getElementById('dynamicInputArea');
             const dynamicInput = document.getElementById('dynamicInput');
-
             const inputValue = dynamicInput.value;
 
-            // Solo enviar si hay una ejecución pausada esperando entrada con un promiseId
-            if (executionPaused && currentPromiseId !== null && sandboxIframe && sandboxIframe.contentWindow) {
-                 // Enviar mensaje al iframe con el valor y el ID de la promesa
+            if (executionPaused && currentPromiseId !== null && sandboxIframe) {
                  sandboxIframe.contentWindow.postMessage({ type: 'entrada_recibida', value: inputValue, promiseId: currentPromiseId }, '*');
-
-                 // Ocultar área de entrada
                  dynamicInputArea.style.display = 'none';
-                 // No restauramos el botón principal aquí, esperamos el mensaje 'ejecucion_completa'.
-                 currentPromiseId = null; // Limpiar referencia
-
-            } else {
-                console.warn("Intento de enviar entrada sin solicitud pendiente (executionPaused:", executionPaused, ", currentPromiseId:", currentPromiseId, ", iframe accesible:", !!(sandboxIframe && sandboxIframe.contentWindow), ")");
+                 currentPromiseId = null; 
             }
         }
 
-        // Permitir enviar entrada con la tecla Enter
         document.getElementById('dynamicInput').addEventListener('keypress', function(event) {
             if (event.key === 'Enter' && executionPaused) {
                 event.preventDefault();
@@ -454,11 +397,8 @@
             }
         });
 
-        // ** Inicializar el iframe al cargar la página **
-        // Creamos el primer iframe al cargar la página para que esté listo.
          window.addEventListener('load', () => {
-            resetEditor(); // Llama a resetEditor para crear el primer iframe y configurar el estado inicial
-            console.log("Página cargada. Editor inicializado.");
+            resetEditor(); 
          });
 
     </script>
