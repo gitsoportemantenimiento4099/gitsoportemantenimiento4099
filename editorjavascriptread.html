@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editor JS con Vista HTML (Corregido)</title>
+    <title>Editor Universal (JS + HTML)</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -13,7 +13,6 @@
             background-color: #f4f4f9;
         }
         
-        /* Estilos del Editor */
         textarea {
             width: 90%;
             height: 180px;
@@ -28,7 +27,6 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
-        /* Estilos Input Dinámico */
         .input-area {
             width: 90%;
             margin-bottom: 15px;
@@ -36,7 +34,7 @@
             border: 1px solid #bee5eb;
             background-color: #d1ecf1;
             color: #0c5460;
-            display: none; /* Oculto por defecto */
+            display: none;
             flex-direction: column;
             border-radius: 6px;
         }
@@ -47,7 +45,6 @@
             border-radius: 4px;
         }
         
-        /* Botones */
         .button-container {
             width: 90%;
             display: flex;
@@ -67,7 +64,6 @@
         .btn-reset { background-color: #dc3545; color: white; }
         .btn-send { background-color: #17a2b8; color: white; align-self: flex-end;}
 
-        /* Consola Negra */
         .console-box {
             width: 90%;
             background-color: #1e1e1e;
@@ -82,13 +78,12 @@
             margin-bottom: 20px;
         }
 
-        /* VISOR HTML (El Iframe visible) */
         .preview-label { width: 90%; font-weight: bold; margin-bottom: 5px; color: #555; }
         
         #iframe-container {
              display: block;
              width: 90%;
-             height: 350px; /* Altura generosa para ver el HTML */
+             height: 350px;
              border: 2px solid #ddd;
              background-color: white;
              border-radius: 6px;
@@ -105,45 +100,38 @@
 </head>
 <body>
 
-    <h1>Editor JavaScript + HTML</h1>
+    <h1>Editor Universal (JS y HTML)</h1>
 
-    <!-- Código por defecto con Backticks (que antes fallaba) -->
-    <textarea id="javascriptCode" spellcheck="false">// 1. Limpiamos la consola
-console.log("Iniciando sistema...");
-
-// 2. Modificamos el HTML usando backticks
-// Esto antes daba error, ahora funcionará
-document.body.style.fontFamily = "sans-serif";
-document.body.innerHTML = `
-  <div style="text-align: center; padding: 20px;">
-    <h1 style="color: #4CAF50;">¡Hola HTML!</h1>
-    <p>Este contenido fue inyectado desde JS.</p>
-    <div id="resultado" style="border: 1px dashed #ccc; padding: 10px; margin-top: 20px;">
-       Esperando datos...
-    </div>
-  </div>
-`;
-
-console.log("HTML Renderizado.");
-
-// 3. Probamos la entrada paso a paso
-let dato = await solicitarEntrada("Escribe algo para poner en el cuadro:");
-
-// 4. Actualizamos el HTML
-const box = document.getElementById('resultado');
-box.innerHTML = "Escribiste: <b>" + dato + "</b>";
-box.style.backgroundColor = "#e8f5e9";
-box.style.borderColor = "green";
-
-console.log("Dato recibido y actualizado.");
-</textarea>
+    <textarea id="javascriptCode" spellcheck="false"><!-- EJEMPLO HTML PURO -->
+<html>
+<head>
+  <style>
+     td { border: 1px solid black; padding: 10px; }
+     table { border-collapse: collapse; width: 100%; }
+     h2 { color: navy; }
+  </style>
+</head>
+<body>
+  <h2>Tabla creada con HTML Puro</h2>
+  <table>
+    <tr>
+      <td>Fila 1 Col 1</td>
+      <td>Fila 1 Col 2</td>
+    </tr>
+    <tr>
+      <td>Fila 2 Col 1</td>
+      <td>Fila 2 Col 2</td>
+    </tr>
+  </table>
+  <p>El editor detectó que esto es HTML y lo mostró visualmente.</p>
+</body>
+</html></textarea>
 
     <div class="button-container">
         <button class="btn-run" id="ejecutarButton" onclick="ejecutarCodigo()">Ejecutar Código</button>
         <button class="btn-reset" onclick="resetEditor()">Reiniciar Todo</button>
     </div>
 
-    <!-- Input Oculto -->
     <div id="dynamicInputArea" class="input-area">
         <label id="inputLabel">Introduce un valor:</label>
         <input type="text" id="dynamicInput" autocomplete="off">
@@ -157,20 +145,15 @@ console.log("Dato recibido y actualizado.");
     <div id="iframe-container"></div>
 
     <script>
-        // Variables globales
         let executionPaused = false;
         let currentPromiseId = null;
         let sandboxIframe = null;
         const iframeContainer = document.getElementById('iframe-container');
 
-        // Escuchar mensajes del iframe
         window.addEventListener('message', handleIframeMessage);
-
-        // Inicializar
         window.onload = resetEditor;
 
         function resetEditor() {
-            // Limpiar UI
             document.getElementById('output').textContent = '> Listo.\n';
             document.getElementById('dynamicInputArea').style.display = 'none';
             document.getElementById('dynamicInput').value = '';
@@ -181,8 +164,7 @@ console.log("Dato recibido y actualizado.");
             const btn = document.getElementById('ejecutarButton');
             btn.textContent = 'Ejecutar Código';
 
-            // Recrear Iframe
-            iframeContainer.innerHTML = ''; // Borra el anterior
+            iframeContainer.innerHTML = '';
             const newIframe = document.createElement('iframe');
             newIframe.id = 'sandbox';
             iframeContainer.appendChild(newIframe);
@@ -191,10 +173,8 @@ console.log("Dato recibido y actualizado.");
 
         async function ejecutarCodigo() {
             const outputElement = document.getElementById('output');
-            const dynamicInputArea = document.getElementById('dynamicInputArea');
             const code = document.getElementById('javascriptCode').value;
 
-            // Lógica para continuar si está pausado
             if (executionPaused) {
                 enviarEntrada();
                 return;
@@ -202,48 +182,35 @@ console.log("Dato recibido y actualizado.");
 
             if (!code.trim()) return;
 
-            // Reiniciar para asegurar limpieza
             resetEditor();
 
-            // Esperar un micro-momento para que el iframe esté en el DOM
             setTimeout(() => {
                 const doc = sandboxIframe.contentDocument;
                 
-                // 1. Escribir estructura básica HTML
+                // 1. Estructura base
                 doc.open();
-                doc.write('<!DOCTYPE html><html><head><style>body{margin:0;}</style></head><body></body></html>');
+                doc.write('<!DOCTYPE html><html><head><style>body{font-family:sans-serif; padding:10px;}</style></head><body></body></html>');
                 doc.close();
 
-                // 2. Definir Script del Sistema (funciones internas)
-                // Usamos textContent para evitar problemas de comillas
+                // 2. Inyectar Herramientas del Sistema (Consola, Input)
                 const systemScript = doc.createElement('script');
                 systemScript.textContent = `
                     window._pendingPromises = {};
                     let promiseCounter = 0;
-
-                    // Redefinir console.log
                     const originalLog = console.log;
                     console.log = function(...args) {
-                        const msg = args.map(a => 
-                            typeof a === 'object' ? JSON.stringify(a) : String(a)
-                        ).join(' ');
+                        const msg = args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ');
                         window.parent.postMessage({ type: 'log', message: msg }, '*');
                     };
-
-                    // Manejo de errores
                     window.onerror = function(msg, src, line) {
                         window.parent.postMessage({ type: 'error', message: msg + ' (Línea ' + line + ')' }, '*');
                         return true;
                     };
-
-                    // Función para pedir datos
                     window.solicitarEntrada = function(mensaje) {
                         const pid = 'p_' + promiseCounter++;
                         window.parent.postMessage({ type: 'solicitar_entrada', mensaje: mensaje, promiseId: pid }, '*');
                         return new Promise(r => window._pendingPromises[pid] = { resolve: r });
                     };
-
-                    // Escuchar respuesta del input
                     window.addEventListener('message', (e) => {
                         if (e.data.type === 'entrada_recibida') {
                             const { promiseId, value } = e.data;
@@ -256,23 +223,38 @@ console.log("Dato recibido y actualizado.");
                 `;
                 doc.body.appendChild(systemScript);
 
-                // 3. Definir Script del Usuario (ENVOLTORIO SEGURO)
-                const userScript = doc.createElement('script');
-                // Envolvemos el código del usuario en una función asíncrona IIFE
-                // IMPORTANTE: Al asignar a .textContent, NO importa si el usuario usó comillas dentro.
-                userScript.textContent = `
-                    (async () => {
-                        try {
-                            console.log(">> Ejecutando...");
-                            ${code} 
-                            console.log(">> Fin ejecución.");
-                            window.parent.postMessage({ type: 'ejecucion_completa' }, '*');
-                        } catch (err) {
-                            console.log("ERROR RUNTIME: " + err.message);
-                        }
-                    })();
-                `;
-                doc.body.appendChild(userScript);
+                // --- AQUÍ ESTÁ LA SOLUCIÓN MÁGICA ---
+                // Detectamos si el código empieza con "<" (es HTML) o no (es JS)
+                
+                const trimmedCode = code.trim();
+                
+                if (trimmedCode.startsWith('<')) {
+                    // MODO HTML DETECTADO
+                    console.log("Modo HTML detectado.");
+                    document.getElementById('output').textContent += '> Interpretando como HTML...\n';
+                    
+                    // Inyectamos el HTML directamente en el cuerpo
+                    // Nota: InnerHTML no ejecuta scripts por seguridad, pero renderiza todo lo visual.
+                    doc.body.innerHTML += trimmedCode; 
+                    
+                } else {
+                    // MODO JAVASCRIPT DETECTADO
+                    console.log("Modo JS detectado.");
+                    
+                    const userScript = doc.createElement('script');
+                    userScript.textContent = `
+                        (async () => {
+                            try {
+                                ${code} 
+                                window.parent.postMessage({ type: 'ejecucion_completa' }, '*');
+                            } catch (err) {
+                                console.log("ERROR: " + err.message);
+                            }
+                        })();
+                    `;
+                    doc.body.appendChild(userScript);
+                }
+                // -------------------------------------
 
             }, 50);
         }
@@ -309,17 +291,12 @@ console.log("Dato recibido y actualizado.");
         function enviarEntrada() {
             const val = document.getElementById('dynamicInput').value;
             if (executionPaused && currentPromiseId && sandboxIframe) {
-                sandboxIframe.contentWindow.postMessage({ 
-                    type: 'entrada_recibida', 
-                    value: val, 
-                    promiseId: currentPromiseId 
-                }, '*');
+                sandboxIframe.contentWindow.postMessage({ type: 'entrada_recibida', value: val, promiseId: currentPromiseId }, '*');
                 document.getElementById('dynamicInputArea').style.display = 'none';
                 document.getElementById('dynamicInput').value = '';
             }
         }
 
-        // Permitir Enter en el input
         document.getElementById('dynamicInput').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') enviarEntrada();
         });
