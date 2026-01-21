@@ -228,16 +228,42 @@
                 
                 const trimmedCode = code.trim();
                 
-                if (trimmedCode.startsWith('<')) {
-                    // MODO HTML DETECTADO
-                    console.log("Modo HTML detectado.");
-                    document.getElementById('output').textContent += '> Interpretando como HTML...\n';
-                    
-                    // Inyectamos el HTML directamente en el cuerpo
-                    // Nota: InnerHTML no ejecuta scripts por seguridad, pero renderiza todo lo visual.
-                    doc.body.innerHTML += trimmedCode; 
-                    
-                } else {
+if (trimmedCode.startsWith('<')) {
+    // MODO HTML DETECTADO
+    console.log("Modo HTML detectado.");
+    document.getElementById('output').textContent += '> Interpretando como HTML...\n';
+    
+    // 1. Insertamos el HTML (esto renderiza la parte visual pero NO ejecuta scripts)
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = trimmedCode;
+    
+    // Movemos los elementos al body del iframe
+    while (tempDiv.firstChild) {
+        doc.body.appendChild(tempDiv.firstChild);
+    }
+
+    // 2. TRUCO DE MAGIA: "Despertar" los scripts
+    // Buscamos todos los scripts que acabamos de meter
+    const scripts = doc.body.querySelectorAll('script');
+    
+    scripts.forEach(oldScript => {
+        // Creamos un script nuevo "fresco"
+        const newScript = doc.createElement('script');
+        
+        // Copiamos el contenido (tu código de la tabla)
+        newScript.textContent = oldScript.textContent;
+        
+        // Si tuviera atributos (como src), los copiamos también
+        Array.from(oldScript.attributes).forEach(attr => {
+            newScript.setAttribute(attr.name, attr.value);
+        });
+
+        // Reemplazamos el script "muerto" por el "vivo"
+        // Esto obliga al navegador a ejecutarlo
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+    });
+    
+} else {
                     // MODO JAVASCRIPT DETECTADO
                     console.log("Modo JS detectado.");
                     
