@@ -194,6 +194,9 @@
 
                 // 2. Inyectar Herramientas del Sistema (Consola, Input)
                 const systemScript = doc.createElement('script');
+                // IMPORTANTE: Le damos un ID para protegerlo después
+                systemScript.id = 'system-script'; 
+                
                 systemScript.textContent = `
                     window._pendingPromises = {};
                     let promiseCounter = 0;
@@ -223,47 +226,41 @@
                 `;
                 doc.body.appendChild(systemScript);
 
-                // --- AQUÍ ESTÁ LA SOLUCIÓN MÁGICA ---
-                // Detectamos si el código empieza con "<" (es HTML) o no (es JS)
-                
+                // --- PROCESAMIENTO INTELIGENTE ---
                 const trimmedCode = code.trim();
                 
-if (trimmedCode.startsWith('<')) {
-    // MODO HTML DETECTADO
-    console.log("Modo HTML detectado.");
-    document.getElementById('output').textContent += '> Interpretando como HTML...\n';
-    
-    // 1. Insertamos el HTML (esto renderiza la parte visual pero NO ejecuta scripts)
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = trimmedCode;
-    
-    // Movemos los elementos al body del iframe
-    while (tempDiv.firstChild) {
-        doc.body.appendChild(tempDiv.firstChild);
-    }
+                if (trimmedCode.startsWith('<')) {
+                    // MODO HTML DETECTADO
+                    console.log("Modo HTML detectado.");
+                    document.getElementById('output').textContent += '> Interpretando como HTML...\n';
+                    
+                    // Creamos un div temporal para inyectar el HTML
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = trimmedCode;
+                    
+                    // Movemos el contenido visual al body
+                    while (tempDiv.firstChild) {
+                        doc.body.appendChild(tempDiv.firstChild);
+                    }
 
-    // 2. TRUCO DE MAGIA: "Despertar" los scripts
-    // Buscamos todos los scripts que acabamos de meter
-    const scripts = doc.body.querySelectorAll('script');
-    
-    scripts.forEach(oldScript => {
-        // Creamos un script nuevo "fresco"
-        const newScript = doc.createElement('script');
-        
-        // Copiamos el contenido (tu código de la tabla)
-        newScript.textContent = oldScript.textContent;
-        
-        // Si tuviera atributos (como src), los copiamos también
-        Array.from(oldScript.attributes).forEach(attr => {
-            newScript.setAttribute(attr.name, attr.value);
-        });
+                    // Reactivamos los scripts del usuario (ignora el del sistema)
+                    const scripts = doc.body.querySelectorAll('script');
+                    
+                    scripts.forEach(oldScript => {
+                        // SI ES EL SCRIPT DEL SISTEMA, NO LO TOCAMOS
+                        if (oldScript.id === 'system-script') return; 
 
-        // Reemplazamos el script "muerto" por el "vivo"
-        // Esto obliga al navegador a ejecutarlo
-        oldScript.parentNode.replaceChild(newScript, oldScript);
-    });
-    
-} else {
+                        const newScript = doc.createElement('script');
+                        newScript.textContent = oldScript.textContent;
+                        
+                        Array.from(oldScript.attributes).forEach(attr => {
+                            newScript.setAttribute(attr.name, attr.value);
+                        });
+
+                        oldScript.parentNode.replaceChild(newScript, oldScript);
+                    });
+                    
+                } else {
                     // MODO JAVASCRIPT DETECTADO
                     console.log("Modo JS detectado.");
                     
